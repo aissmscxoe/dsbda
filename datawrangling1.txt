@@ -1,0 +1,107 @@
+# Import libraries
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Import and view dataset
+data = pd.read_csv('weatherAUS.csv')
+#data.head displays top 5 records by default
+data.head(10)
+
+data.tail() #It displays bottom 5 records
+
+
+# Data Preprocessing
+
+data.info()
+
+data.columns
+
+data.isnull().sum()
+
+# Descriptive Statistics: It is used to summarize and describe the features of data in
+a meaningful way to extract insights.
+
+
+print(data.describe(exclude=[object])) # It gives descriptive statistics of numerical variable
+
+print(data.describe(include=[object])) #descriptive statistics for categorical variables
+
+# Finding Categorical and Numerical Features in a Data set:
+
+categorical_features = [column_name for column_name in data.columns if data[column_name].dtype == 'O']
+print("Number of Categorical Features: {}".format(len(categorical_features)))
+print("Categorical Features: ",categorical_features)
+
+numerical_features = [column_name for column_name in data.columns if data[column_name].dtype != 'O']
+print("Number of Numerical Features: {}".format(len(numerical_features)))
+print("Numerical Features: ",numerical_features)
+
+data.shape
+
+# Handling Missing values in Categorical Features:
+
+categorical_features = [column_name for column_name in data.columns if data[column_name].dtype == 'O']
+data[categorical_features].isnull().sum()
+
+# Imputing the missing values in categorical features using the most frequent value which is mode:
+categorical_features_with_null = [feature for feature in categorical_features if data[feature].isnull().sum()]
+for each_feature in categorical_features_with_null:
+ mode_val = data[each_feature].mode()[0]
+ data[each_feature].fillna(mode_val,inplace=True)
+
+# Handling Missing values in Numerical features:
+numerical_features = [column_name for column_name in data.columns if data[column_name].dtype != 'O']
+data[numerical_features].isnull().sum()
+
+#Impute missing values in numerical features using mean
+numerical_features_with_null = [feature for feature in numerical_features if data[feature].isnull().sum()]
+for feature in numerical_features_with_null:
+ mean_value = data[feature].mean()
+ data[feature].fillna(mean_value,inplace=True)
+
+data.isnull().sum()
+
+# Converting categorical columns into numerical data
+
+# Encoding
+
+def encode_data(feature_name):
+  '''
+  This function takes feature name as a parameter and returns mapping dictionary to replace(or map) categorical 
+  data with numerical data
+  '''
+  mapping_dict = {}
+  unique_values = list(data[feature_name].unique())
+  for idx in range(len(unique_values)):
+    mapping_dict[unique_values[idx]] = idx
+  return mapping_dict
+
+data.RainToday.value_counts()
+
+data.RainTomorrow.value_counts()
+
+for cols in data.columns:
+  print(data[cols].dtype)
+
+for cols in data.columns:
+  if data[cols].dtype == 'O':
+    print(data[cols].value_counts())
+
+# using dictionary to directly map the cat features as they are only yes and no
+data['RainToday'].replace({'No':0, 'Yes': 1}, inplace = True) 
+data['RainTomorrow'].replace({'No':0, 'Yes': 1}, inplace = True)
+# using the encode_data function to make a dictionary of the values in the column and then encode them to numerical data
+data['WindGustDir'].replace(encode_data('WindGustDir'),inplace = True) 
+data['WindDir9am'].replace(encode_data('WindDir9am'),inplace = True)
+data['WindDir3pm'].replace(encode_data('WindDir3pm'),inplace = True)
+data['Location'].replace(encode_data('Location'), inplace = True)
+
+
+for cols in data.columns:
+  print(data[cols].head())
+
+
+
+

@@ -1,0 +1,149 @@
+# # Descriptive Statistics - Measures of Central
+# # Tendancy and variability
+# # 1) Provide summary statistics(mean, median, minimum,
+# # maximum, standard deviation) for a dataset with
+# # numeric variables grouped by one of the qualitative
+# # variable.
+# # Data Description:
+# # Link of the dataset:
+# https://www.kaggle.com/datasets/aungpyaeap/supermarket-sales
+
+
+# import the required librabries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Read the datasets
+sales = pd.read_csv('supermarket_sales.csv')
+
+sales.head()
+
+sales.tail()
+
+sales.shape
+
+sales.isnull().sum()
+
+# Total number of non-missing calues -- using count()
+sales.count()
+
+# What is the total sales amount -- using sum()
+sales[['Total','gross income']].sum()
+
+# What is the average satisfaction level and what is the spread of it -- using mean and std
+print(sales['Rating'].mean())
+print(sales['Rating'].std())
+
+sales['Payment'].value_counts()
+
+# Most frequently ussed payment method -- using mode()
+print('The Mode of Payment : ',sales['Payment'].mode())
+
+sales['Payment'].mode() #Ewallet is the payment method which has been used most frequently used
+
+# Minimum and Maximum Quantity sold -- using min() and max()
+print(sales['Quantity'].min()) # 1 is the minimum quantity which has been sold
+print(sales['Quantity'].max()) # 10 is the maximum quantity which has been sold
+
+# Daily increasing sales(how the sales increasing in daily bases) -- using cumsum()
+sales['Total'].cumsum().head() # total amount sold like 548.9715,...
+
+sales['Total'].head()
+
+# Median
+median = sales['Quantity'].median()
+median
+
+print('median quantity: ' + str(median))
+
+# Var
+var = sales['Quantity'].var()
+var
+
+print('var of quantity: ' + str(var))
+
+# group by
+groupby_sum = sales.groupby(['City']).sum()
+groupby_sum
+
+groupby_count = sales.groupby(['City']).count()
+groupby_count
+
+groupby_sum1 = sales.groupby(['Payment']).sum()
+groupby_sum1
+
+
+groupby_count1 = sales.groupby(['Payment']).count()
+groupby_count1
+
+
+print('sum of values, grouped by the payment: ' + str(groupby_sum1))
+
+print('count of values, grouped by the payment: ' + str(groupby_count1))
+
+
+# describe
+sales.describe() # it does not provide categorical attribute summay, bydefault it provides the summary of numerical features
+
+sales.describe(include='object')  # for categorical variables
+
+
+sales.describe(exclude='object')
+
+
+
+# 2) Write a Python program to display some basic
+# statistical details like percentile, mean, standard
+# deviation etc. of the species of 'iris-setosa','irisversicolor' of iris.csv dataset.
+
+# Read the data
+iris = pd.read_csv('Iris.csv')
+
+
+iris.head(), iris.tail(), iris.columns, iris.isna().sum()
+
+iris.describe()
+
+# How many data points for each class are present or flowers for each species are present?
+iris['Species'].value_counts()
+
+# 2D scatter plot
+iris.plot(kind='scatter', x='SepalLengthCm', y='SepalWidthCm')
+plt.show()
+
+iris.Species.mode()
+
+import seaborn as sns
+sns.set_style("whitegrid")
+sns.FacetGrid(iris, hue="Species", height=7).map(plt.scatter, "SepalLengthCm", "SepalWidthCm")
+plt.show()
+
+# Filter the data for the species 'iris-setosa' and 'iris-versicolor'
+setosa_data = iris[iris['Species'] == 'Iris-setosa']
+versicolor_data = iris[iris['Species'] == 'Iris-versicolor']
+
+setosa_data, versicolor_data
+
+
+# Calculate some basic statistical details for each species
+setosa_stats = {
+ 'percentile': np.percentile(setosa_data['SepalLengthCm'], 50),
+ 'mean': np.mean(setosa_data['SepalLengthCm']),
+ 'std_dev': np.std(setosa_data['SepalLengthCm'])
+}
+
+
+versicolor_stats = {
+ 'percentile': np.percentile(versicolor_data['SepalLengthCm'], 50),
+ 'mean': np.mean(versicolor_data['SepalLengthCm']),
+ 'std_dev': np.std(versicolor_data['SepalLengthCm'])
+}
+
+
+# Print the results
+print('Statistics for Iris Setosa:')
+print(setosa_stats)
+print('')
+print('Statistics for Iris Versicolor:')
+print(versicolor_stats)

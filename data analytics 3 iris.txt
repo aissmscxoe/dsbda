@@ -1,0 +1,73 @@
+# Que: Implement simple naive bayes classification algorithm using python on iris.csv dataset and compare confusion matrix to
+# find TP, FP, TN, FN, Accuracy, Error rate, Precision, Recall on the given dataset
+# Probability: Probability is a number that reflects the chance. Conditional Probability: Conditional probability is the
+# probability of an event happening, given that another event has already happened. For example, the probability of it raining
+# tomorrow given that it is cloudy today. Think of it as "if-then" probability. If a certain condition is met (it is cloudy), then the
+# likelihood of another event occurring (it raining) can change. It allows us to see how one event influences the probability of
+# another event. Naive Bayes Classifier: Naïve Bayes algorithm is a supervised learning algorithm, which is based on Bayes
+# theorem and used for solving classification problems. Naïve Bayes Classifier is one of the simple and most effective
+# Classification algorithms which helps in building the fast machine learning models that can make quick predictions. It is a
+# probabilistic classifier, which means it predicts on the basis of the probability of an object. The Naïve Bayes algorithm is
+# comprised of two words Naïve and Bayes, Which can be described as: Naïve: It is called Naïve because it assumes that the
+# occurrence of a certain feature is independent of the occurrence of other features. Bayes: It is called Bayes because it
+# depends on the principle of Bayes' Theorem. Bayes' Theorem: Bayes' theorem is also known as Bayes' Rule or Bayes' law,
+# which is used to determine the probability of a hypothesis with prior knowledge. It depends on the conditional probability
+
+# Import required libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+
+df = pd.read_csv('irisa6.csv')
+df.head()
+
+df.Species.value_counts()
+
+df.isnull().sum()
+
+X = df.iloc[:, :4].values
+y = df['Species'].values
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+sc_X = StandardScaler()
+X_train = sc_X.fit_transform(X_train)
+X_test = sc_X.transform(X_test)
+
+print(f'Train Dataset Size - X: {X_train.shape}, y: {y_train.shape}')
+print(f'Test  Dataset Size - X: {X_test.shape}, y: {y_test.shape}')
+
+from sklearn.naive_bayes import MultinomialNB
+
+classifier = MultinomialNB()
+classifier.fit(X_train,y_train)
+
+classifier.score(X_test, y_test)
+
+y_pred = classifier.predict(X_test)
+
+y_pred
+
+import sklearn.metrics
+lbs = ['Iris-versicolor','Iris-setosa','Iris-virginica']
+print(sklearn.metrics.confusion_matrix(y_test, y_pred, labels = lbs))
+
+from sklearn.metrics import classification_report
+
+print(classification_report(y_test,y_pred))
+
+from sklearn.naive_bayes import GaussianNB
+gnb = GaussianNB()
+gnb.fit(x_train, y_train)
+
+classifier.score(x_test, y_test)
+
+y_pred = gnb.predict(x_test)
+
+y_pred
+
+y_test

@@ -1,0 +1,56 @@
+# Data Visualization III
+# Download the Iris flower dataset or any other dataset into a DataFrame. Scan the dataset and give the inference as:
+# 1. List down the features and theri types (ex, numeric, nominal) available in the dataset.
+# 2. Create a histogram for each feature in the dataset to illustrate the feature distributions.
+# 3. Create a boxplot for each feature in the dataset.
+# 4. Compare distribution and identity outliers.
+
+
+# Loading libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.datasets import load_iris
+# iris = load_iris()
+# Iris = pd.DataFrame(iris.data, columns=iris.feature_names)
+# Iris['target'] = iris.target
+Iris = sns.load_dataset('iris')
+
+Iris.corr()
+
+sns.heatmap(Iris.corr(), annot=True, cmap='Wistia')
+
+sns.pairplot(Iris)
+
+#List down the features and their types
+Iris.info()
+
+np.unique(Iris["species"])
+
+Iris.hist(figsize=(12,12))
+plt.show()
+
+Compare distribution and identify outliers
+# By looking at the histograms and boxplots, we can see the distribution of each feature and identify any outliers.
+# For example, we can see that the petal length and petal width have a bimodal distribution. The sepal length and sepal width
+# have a more normal distribution. We can also see that there are some outliers in the sepal width and petal length features.
+# We can further investigate the outliers using the describe method of the DataFrame as follows:
+
+Iris.describe()
+
+sns.boxplot(data=Iris, orient="h")
+plt.show()
+
+sns.boxplot(x = 'sepal_width', data = Iris)
+
+Q1 = Iris['sepal_width'].quantile(0.25)
+Q3 = Iris['sepal_width'].quantile(0.75)
+IQR = Q3-Q1
+print(IQR)
+
+data = Iris[Iris['sepal_width'] < (Q1 - 1.5 * IQR) / (Iris['sepal_width'] > (Q3 + 1.5 * IQR))]
+data
+
+sns.boxplot(x = 'sepal_width', data = data)

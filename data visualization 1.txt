@@ -1,0 +1,39 @@
+import pandas as pd
+import numpy as np
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+dataset = sns.load_dataset('titanic')
+
+dataset.head()
+
+dataset.shape
+
+dataset.isnull().sum()
+
+# remove all null values from the dataset
+dataset = dataset.dropna()
+
+# Distributional Plots
+# Distributional plots, as the name suggests are type of plots that show the statistical distribution of data.
+# The Dist Plot
+# The distplot() shows the histogram distribution of data for a single column. The column name is passed as a parameter to the
+# distplot() function.
+
+# Let's see how the price of the ticket for each passenger is distributed.
+sns.distplot(dataset['fare'])
+
+# You can see that most of the tickets have been solved between 0-50 dollars. The line that you see represents the kernel
+# density estimation. You can remove this line by passing False as the parameter for the kde attribute as shown below:
+
+
+sns.distplot(dataset['fare'], kde=False)
+
+# Now you can see there is no line for the kernel density estimation on the plot.
+# You can also pass the value for the bins parameter in order to see more or less details in the graph
+
+sns.distplot(dataset['fare'], kde=False, bins=10) #Here we set the number of bins to 10.
+
+# In the output, you will see data distributed in 10 bins You can clearly see that for more than 700 passengers, the ticket price is
+# between 0 and 50.
